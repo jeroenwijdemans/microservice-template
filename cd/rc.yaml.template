@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: line-client
+spec:
+  replicas: 1
+  selector:
+    app: line-client
+  template:
+    metadata:
+      name: line-client
+      labels:
+        app: line-client
+    spec:
+      containers:
+      - name: line-client
+        image: {{DOCKER_IMAGE}}
+        ports:
+        - containerPort: 7777

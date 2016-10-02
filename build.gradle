@@ -12,7 +12,7 @@ apply plugin: 'groovy'
 apply plugin: 'eu.appsatori.fatjar'
 
 group 'com.wijdemans'
-version '1.0'
+version '1.0.0'
 
 
 compileJava {
@@ -71,7 +71,6 @@ configurations {
 
 dependencies {
     compile libraries.logging
-    compile 'com.wijdemans:microlib:0.1'
 
     compile 'org.mongodb:mongo-java-driver:3.2.2'
     compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.7.3'
@@ -113,3 +112,6 @@ task(run, dependsOn: 'classes', type: JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
 }
 
+task version << {
+    println version
+}
