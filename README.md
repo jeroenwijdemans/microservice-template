@@ -10,7 +10,7 @@ Provides:
 - cqrs setup using kafka
 
 - prometheus metrics
-- swagger-ui dist as 
+- swagger-ui dist ("as is") 
 
 - Jenkins jobdsl description
 - kubernetes deployment scripts
@@ -34,13 +34,13 @@ TODO :
 
 # Customize
 
-change the following: 
-
 ### build.gradle
 
 Change group 'com.wijdemans' in build.gradle
 
 ### project.dsl.groovy
+
+To remove sensitive data from the build set the following environment variables. 
 
 set JENKINS_GITHUB_CREDENTIALS to valid credentials:
 
