@@ -8,15 +8,13 @@ import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.*;
-import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.file.Paths;
 
 @Path("/")
 public class ApiListingResource extends BaseApiListingResource {
@@ -60,14 +58,24 @@ public class ApiListingResource extends BaseApiListingResource {
     @GET
     @Path("/api-docs/{path:.*}")
     @ApiOperation(value = "The swagger api itself", hidden = true)
-    public Response staticSwaggerPages(@PathParam("path") String path) throws URISyntaxException {
-        String resource = "api-docs/" + path;
-        logger.trace("Serving resource : [{}]", resource);
-        File r = Paths.get(ClassLoader.getSystemResource(resource).toURI()).toFile();
+    public Response staticSwaggerPages(@PathParam("path") String path) {
+        String resource = "/api-docs/" + path;
+        logger.debug("Serving resource : [{}]", resource);
+        InputStream is = ApiListingResource.class.getResourceAsStream(resource);
+        if (is == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
 
         // TODO add mediatype per file @Produces(MediaType.TEXT_HTML)
-
-        return Response.ok(r).build();
+        StreamingOutput stream = os -> {
+            byte[] buffer = new byte[4096];
+            int n;
+            while ((n = is.read(buffer)) > 0) {
+                os.write(buffer, 0, n);
+            }
+            os.close();
+        };
+        return Response.ok(stream).build();
     }
 }
 
