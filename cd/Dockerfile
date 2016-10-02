@@ -2,7 +2,7 @@ FROM alpine:3.3
 
 RUN apk --update add openjdk8-jre
 
-COPY ./build/libs/*.jar /srv/app.jar
+COPY *.jar /srv/app.jar
 
 WORKDIR /srv
 

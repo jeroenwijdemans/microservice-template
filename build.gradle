@@ -12,7 +12,7 @@ apply plugin: 'groovy'
 apply plugin: 'eu.appsatori.fatjar'
 
 group 'com.wijdemans'
-version '1.0.0'
+version '1.0.1'
 
 
 compileJava {
@@ -115,3 +115,10 @@ task(run, dependsOn: 'classes', type: JavaExec) {
 task version << {
     println version
 }
+
+task copyDockerResources(type: Copy) {
+    from 'cd/'
+    into 'build/libs'
+    include 'Dockerfile'
+}
+

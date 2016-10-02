@@ -42,14 +42,7 @@ Change group 'com.wijdemans' in build.gradle
 
 To remove sensitive data from the build set the following environment variables. 
 
-set JENKINS_GITHUB_CREDENTIALS to valid credentials:
+Set JENKINS_GITHUB_CREDENTIALS to a reference id for valid credentials.
+Set docker registry to valid repository.
 
-```
-export JENKINS_GITHUB_CREDENTIALS='****************************'
-```
-
-set docker registry to valid repository
-
-```
-export JENKINS_DOCKER_REGISTRY="registry.example.com"
-```
+(for example by setting these as global jenkins variables)
