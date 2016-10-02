@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{ddMMyy-HH:mm:ss.SSS} [%-15.15thread] %-5.5level %30.30logger{30}:%-4.4line %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!--<appender name="REDIS" class="com.cwbase.logback.RedisAppender">-->
+        <!--<host>127.0.0.1</host>-->
+        <!--<port>6379</port>-->
+        <!--<key>logstash</key>-->
+        <!--<layout class="ch.qos.logback.core.ConsoleAppender">-->
+            <!--<fieldNames>-->
+                <!--<levelValue>[ignore]</levelValue>-->
+                <!--<version>[ignore]</version>-->
+            <!--</fieldNames>-->
+        <!--</layout>-->
+    <!--</appender>-->
+
+    <!--<appender name="ASYNC_REDIS" class="ch.qos.logback.classic.AsyncAppender">-->
+        <!--<appender-ref ref="REDIS" />-->
+    <!--</appender>-->
+
+    <logger name="com.wijdemans" level="debug"/>
+
+    <root level="info">
+        <appender-ref ref="STDOUT" />
+    </root>
+
+</configuration>
