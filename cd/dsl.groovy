@@ -33,8 +33,8 @@ job("REST_TEMPLATE") {
 
                    sed "s~{{DOCKER_IMAGE}}~\${DOCKER_IMAGE}~"  ./cd/rc.yaml.template > ./cd/rc.yaml
 
-                   kubectl create -f ./cd/rc.yaml
-                   kubectl create -f ./cd/service.yaml
+                   ~/kubectl apply -f ./cd/rc.yaml
+                   ~/kubectl apply -f ./cd/service.yaml
               fi
               """.stripIndent())
     }
