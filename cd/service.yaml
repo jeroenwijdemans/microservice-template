@@ -1,15 +1,14 @@
-service:
 apiVersion: v1
 kind: Service
 metadata:
   labels:
-    name: line-client
-  name: line-client
+    name: service-template
+  name: service-template
 spec:
   ports:
     # The port that this service should serve on.
     - port: 7777
   # Label keys and values that must match in order to receive traffic for this service.
   selector:
-    app: line-client
+    app: service-template
   type: LoadBalancer
