@@ -31,8 +31,7 @@ public class Main {
     public static Server startServer() throws IOException {
 
         logger.info("Registering providers and resources.  ");
-        final ResourceConfig rc = new ResourceConfig();
-        rc.register(ImmediateFeature.class);
+        final ResourceConfig rc = new ResourceConfig(ImmediateFeature.class, TemplateResource.class, CqrsResource.class);
 
         String[] packages = {
                 "com.wijdemans"
@@ -56,7 +55,6 @@ public class Main {
 
             }
         });
-        rc.register(TemplateResource.class, CqrsResource.class);
 
 //        rc.register(RolesAllowedDynamicFeature.class); // this enables the RolesAllowed
 
