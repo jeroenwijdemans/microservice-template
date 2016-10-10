@@ -20,6 +20,23 @@ TODO :
 - build properties
 - runtime properties
 
+# Start application
+
+```
+./gradlew run
+```
+
+or build the Dockerfile
+
+```
+./gradlew fatJar
+cd cd/
+docker build .
+```
+
+or use the Jenkins pipeline plugin
+
+
 # Prerequisites
 
 ## to run

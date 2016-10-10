@@ -31,10 +31,9 @@ job("REST_TEMPLATE") {
                    cd \$DIR
                    echo 'Start deployment ... '
 
-                   sed "s~{{DOCKER_IMAGE}}~\${DOCKER_IMAGE}~"  ./cd/rc.yaml.template > ./cd/rc.yaml
+                   sed "s~{{DOCKER_IMAGE}}~\${DOCKER_IMAGE}~"  ./cd/kubernetes.yaml.template > ./cd/kubernetes.yaml
 
-                   ~/kubectl apply -f ./cd/rc.yaml
-                   ~/kubectl apply -f ./cd/service.yaml
+                   ~/kubectl apply -f ./cd/kubernetes.yaml
               fi
               """.stripIndent())
     }
