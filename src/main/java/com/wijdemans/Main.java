@@ -1,16 +1,19 @@
 package com.wijdemans;
 
-import com.wijdemans.kafka.KafkaProvider;
-import com.wijdemans.kafka.TemplateConsumer;
+import com.wijdemans.cqrs.CqrsResource;
+import com.wijdemans.cqrs.KafkaPostService;
+import com.wijdemans.cqrs.KafkaProvider;
 import io.prometheus.client.exporter.MetricsServlet;
 import io.prometheus.client.hotspot.DefaultExports;
 import io.swagger.jaxrs.listing.SwaggerSerializers;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
+import org.glassfish.hk2.api.Immediate;
 import org.glassfish.hk2.api.ServiceLocator;
 import org.glassfish.hk2.api.ServiceLocatorFactory;
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
+import org.glassfish.jersey.server.ApplicationHandler;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.servlet.ServletContainer;
 import org.slf4j.Logger;
@@ -28,11 +31,13 @@ public class Main {
     public static Server startServer() throws IOException {
 
         logger.info("Registering providers and resources.  ");
-        final ResourceConfig rc = new ResourceConfig(TemplateResource.class);
+        final ResourceConfig rc = new ResourceConfig();
+        rc.register(ImmediateFeature.class);
 
         String[] packages = {
                 "com.wijdemans"
         };
+
         rc.packages(packages);
 
         // enable swagger
@@ -47,11 +52,15 @@ public class Main {
                 bind(ApiListingResource.class).to(ApiListingResource.class).in(Singleton.class);
 
                 bind(TemplateService.class).to(TemplateService.class).in(Singleton.class);
+                bind(KafkaPostService.class).to(KafkaPostService.class).in(Singleton.class);
 
             }
         });
+        rc.register(TemplateResource.class, CqrsResource.class);
 
 //        rc.register(RolesAllowedDynamicFeature.class); // this enables the RolesAllowed
+
+
 
         // user Jetty Servlet container (not Grizzly) to allow httprequest injection
         ServletContainer servletContainer = new ServletContainer(rc);
@@ -81,7 +90,7 @@ public class Main {
             server.start();
             logger.info("... server ready to serve!");
 
-            printCurrentRegisteredServiceLocators();
+//            printCurrentRegisteredServiceLocators();
 
         } catch (Exception e) {
             logger.error("Error starting server:  ", e);

@@ -1,10 +1,13 @@
-package com.wijdemans.kafka;
+package com.wijdemans;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.wijdemans.TemplateService;
+import com.wijdemans.cqrs.Action;
+import com.wijdemans.cqrs.KafkaPostService;
+import com.wijdemans.cqrs.KafkaProvider;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.glassfish.hk2.api.Immediate;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,8 +18,9 @@ import javax.inject.Singleton;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import static com.wijdemans.kafka.KafkaProvider.TOPIC;
+import static com.wijdemans.cqrs.KafkaProvider.TOPIC;
 
+@Immediate
 @Singleton
 public class TemplateConsumer {
 
@@ -25,17 +29,27 @@ public class TemplateConsumer {
 
     private static KafkaConsumer consumer;
     private final KafkaProvider kafkaProvider;
+    private final KafkaPostService kafkaPostService;
     private final TemplateService templateService;
 
     @Inject
-    public TemplateConsumer(KafkaProvider kafkaProvider, TemplateService templateService) {
+    public TemplateConsumer(
+            KafkaProvider kafkaProvider,
+            KafkaPostService kafkaPostService,
+            TemplateService templateService) {
         this.kafkaProvider = kafkaProvider;
+        this.kafkaPostService = kafkaPostService;
         this.templateService = templateService;
         this.consumer = kafkaProvider.getConsumer();
     }
 
     @PostConstruct
     public void start() {
+
+        logger.debug("Registering actions");
+        kafkaPostService.register(new Action("addSection"));
+        kafkaPostService.register(new Action("updateSection"));
+
         logger.info("Start the consumer ...");
         ExecutorService executorService = Executors.newFixedThreadPool(1);
         executorService.submit(this::poll);
@@ -70,21 +84,21 @@ public class TemplateConsumer {
 
     private void handleTopicMessage(ConsumerRecord<String, String> record) {
         logger.trace("Got record {}", record.key());
+        // handle all actions
         switch (record.key()) {
-            case "add-typology-v1": {
+            case "addSection": {
                 try {
                     JSONObject type = new JSONObject(record.value());
-                    upsertV1(type);
+                    logger.debug("got ..." + type);
                 } catch (RuntimeException e) {
                     logger.debug("Error parsing add-type message", e);
                 }
                 break;
             }
-            case "update-typology-v1": {
+            case "updateSection": {
                 try {
                     JSONObject type = new JSONObject(record.value());
-                    upsertV1(type);
-
+                    logger.debug("got something else..." + type);
                 } catch (RuntimeException e) {
                     logger.debug("Error parsing update-type message", e);
                 }
@@ -95,10 +109,4 @@ public class TemplateConsumer {
                 break;
         }
     }
-
-    private void upsertV1(JSONObject json) {
-
-    }
-
-
 }

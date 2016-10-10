@@ -1,0 +1,16 @@
+zk.connect=localhost:2182/test
+metadata.broker.list=localhost:9092
+
+session.timeout.ms=30000
+heartbeat.interval.ms=5000
+
+enable.auto.commit=true
+auto.commit.interval.ms=10000
+
+value.deserializer=org.apache.kafka.common.serialization.StringDeserializer
+bootstrap.servers=localhost:9092
+key.deserializer=org.apache.kafka.common.serialization.StringDeserializer
+zookeeper.session.timeout.ms=5000
+zookeeper.connection.timeout.ms=6000
+
+auto.offset.reset=earliest

@@ -1,7 +1,8 @@
-package com.wijdemans.kafka;
+package com.wijdemans.cqrs;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.apache.kafka.clients.producer.KafkaProducer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,8 +22,8 @@ public class KafkaProvider {
 
     public static final String TOPIC = "my-template";
 
-
     private KafkaConsumer<String, String> consumer;
+    private KafkaProducer<String, String> producer;
 
     public KafkaProvider() {
         logger.debug("Starting provider");
@@ -43,6 +44,13 @@ public class KafkaProvider {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        try (InputStream props = ClassLoader.getSystemResourceAsStream("producer.props")) {
+            Properties properties = new Properties();
+            properties.load(props);
+            producer = new KafkaProducer(properties);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         consumer.subscribe(Arrays.asList(TOPIC));
     }
@@ -54,5 +62,9 @@ public class KafkaProvider {
 
     public KafkaConsumer<String, String> getConsumer() {
         return consumer;
+    }
+
+    public KafkaProducer<String, String> getProducer() {
+        return producer;
     }
 }

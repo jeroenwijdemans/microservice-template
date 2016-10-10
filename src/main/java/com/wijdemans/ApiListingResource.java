@@ -60,7 +60,7 @@ public class ApiListingResource extends BaseApiListingResource {
     @ApiOperation(value = "The swagger api itself", hidden = true)
     public Response staticSwaggerPages(@PathParam("path") String path) {
         String resource = "/api-docs/" + path;
-        logger.debug("Serving resource : [{}]", resource);
+        logger.trace("Serving resource : [{}]", resource);
         InputStream is = ApiListingResource.class.getResourceAsStream(resource);
         if (is == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
