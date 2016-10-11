@@ -72,6 +72,8 @@ configurations {
 dependencies {
     compile libraries.logging
 
+    compile 'com.wijdemans:valueobjects:0.1.0'
+
     compile 'org.mongodb:mongo-java-driver:3.2.2'
     compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.7.3'
 

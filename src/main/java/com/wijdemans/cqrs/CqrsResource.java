@@ -37,12 +37,12 @@ public class CqrsResource {
             Command command
     ) {
         try {
-            service.publish(command);
+            String linkId = service.publish(command);
+            return Response.status(202).entity(linkId).build();
         } catch (InvalidCommandException e) {
             logger.debug("Incorrect command: [{}]", e.getMessage());
             return Response.status(400).entity(e.getErrors()).build();
         }
-        return Response.status(202).build();
     }
 
     @GET

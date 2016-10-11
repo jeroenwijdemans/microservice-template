@@ -2,9 +2,9 @@ package com.wijdemans.cqrs;
 
 import com.wijdemans.ValueType;
 
-public class Action extends ValueType<String> {
+public class Version extends ValueType<String> {
 
-    public Action(String value) {
+    public Version(String value) {
         super(value);
     }
 }

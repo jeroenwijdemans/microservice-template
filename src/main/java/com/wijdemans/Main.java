@@ -1,8 +1,8 @@
 package com.wijdemans;
 
-import com.wijdemans.cqrs.CqrsResource;
-import com.wijdemans.cqrs.KafkaPostService;
-import com.wijdemans.cqrs.KafkaProvider;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.wijdemans.cqrs.*;
 import io.prometheus.client.exporter.MetricsServlet;
 import io.prometheus.client.hotspot.DefaultExports;
 import io.swagger.jaxrs.listing.SwaggerSerializers;
@@ -13,7 +13,6 @@ import org.glassfish.hk2.api.Immediate;
 import org.glassfish.hk2.api.ServiceLocator;
 import org.glassfish.hk2.api.ServiceLocatorFactory;
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
-import org.glassfish.jersey.server.ApplicationHandler;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.servlet.ServletContainer;
 import org.slf4j.Logger;
@@ -29,6 +28,12 @@ public class Main {
     private static final Logger logger = LoggerFactory.getLogger(Main.class);
 
     public static Server startServer() throws IOException {
+
+        ObjectMapper mapper = new ObjectMapper();
+        SimpleModule valueTyepModule = new SimpleModule("ValueTypeSerializer");
+        valueTyepModule.addDeserializer(ValueType.class, new ValueTypeDeserializer());
+        valueTyepModule.addSerializer(new ValueTypeSerializer());
+        mapper.registerModule(valueTyepModule);
 
         logger.info("Registering providers and resources.  ");
         final ResourceConfig rc = new ResourceConfig(ImmediateFeature.class, TemplateResource.class, CqrsResource.class);
@@ -56,6 +61,7 @@ public class Main {
                 bind(TemplateService.class).to(TemplateService.class).in(Singleton.class);
                 bind(KafkaPostService.class).to(KafkaPostService.class).in(Singleton.class);
 
+                bind(PrometheusFilter.class).to(PrometheusFilter.class).in(Singleton.class);
             }
         });
 
@@ -69,16 +75,11 @@ public class Main {
 
         DefaultExports.initialize();
 
-        context.addServlet(new ServletHolder(
-                new MetricsServlet()), "/metrics");
+        context.addServlet(new ServletHolder(new MetricsServlet()), "/metrics");
 
         server.setHandler(context);
 
         return server;
-    }
-
-    private static URI getBaseUri() {
-        return URI.create(String.format("http://%s:%s/api/", "0.0.0.0", 7070));
     }
 
     public static void main(String[] args) throws IOException {
@@ -91,22 +92,6 @@ public class Main {
 
         } catch (Exception e) {
             logger.error("Error starting server:  ", e);
-        }
-    }
-
-    private static void printCurrentRegisteredServiceLocators() {
-        ServiceLocatorFactory sf = ServiceLocatorFactory.getInstance();
-        Class c = sf.getClass();
-        try {
-            java.lang.reflect.Field field = c.getDeclaredField("serviceLocators");
-            field.setAccessible(true);
-            HashMap<String, ServiceLocator> map = (HashMap<String, ServiceLocator>) field.get(sf);
-            if (map.entrySet().isEmpty()) {
-                logger.warn("Nothing registered yet...");
-            }
-            map.values().stream().forEach(it -> logger.debug(it.getName()));
-        } catch (IllegalAccessException | NoSuchFieldException e) {
-            logger.debug("Error reading ServiceLocatorFactory's serviceLocators: {}", e.getMessage());
         }
     }
 

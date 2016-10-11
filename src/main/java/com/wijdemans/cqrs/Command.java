@@ -10,26 +10,28 @@ import java.time.LocalDateTime;
 
 public class Command {
 
-    // TODO make value objects out of these
-    private String version;
-
+    @JsonDeserialize(using = ValueTypeDeserializer.class)
+    @JsonSerialize(using = ValueTypeSerializer.class)
+    private Version version;
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime userDate;
-    private String action;
+    @JsonDeserialize(using = ValueTypeDeserializer.class)
+    @JsonSerialize(using = ValueTypeSerializer.class)
+    private Action action;
     private JSONObject payload;
 
     public Command() {
     }
 
-    public Command(String version, LocalDateTime userDate, String action, JSONObject payload) {
+    public Command(Version version, LocalDateTime userDate, Action action, JSONObject payload) {
         this.version = version;
         this.userDate = userDate;
         this.action = action;
         this.payload = payload;
     }
 
-    public String getVersion() {
+    public Version getVersion() {
         return version;
     }
 
@@ -37,7 +39,7 @@ public class Command {
         return userDate;
     }
 
-    public String getAction() {
+    public Action getAction() {
         return action;
     }
 
@@ -45,7 +47,7 @@ public class Command {
         return payload;
     }
 
-    public void setVersion(String version) {
+    public void setVersion(Version version) {
         this.version = version;
     }
 
@@ -53,7 +55,7 @@ public class Command {
         this.userDate = userDate;
     }
 
-    public void setAction(String action) {
+    public void setAction(Action action) {
         this.action = action;
     }
 

@@ -9,8 +9,8 @@ import javax.inject.Named;
 import javax.ws.rs.ext.Provider;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 /**
  * Checks if the command is correct.
@@ -23,7 +23,7 @@ public class KafkaPostService {
     private static final Logger logger = LoggerFactory.getLogger(KafkaPostService.class);
     private final KafkaProvider kafkaProvider;
     private final String cqrsTopic;
-    private Map<String, Action> actions = new HashMap<>();
+    private Map<Action, Action> actions = new HashMap<>();
 
     @Inject
     public KafkaPostService(KafkaProvider kafkaProvider, @Named("CQRS_TOPIC") String cqrsTopic) {
@@ -38,22 +38,22 @@ public class KafkaPostService {
         String linkId = UUID.randomUUID().toString();
 
         logger.debug("Pushing command to the kafka log");
-        ProducerRecord record = new ProducerRecord(cqrsTopic, command.getAction(), command.getPayload().toString());
+        ProducerRecord record = new ProducerRecord(cqrsTopic, command.getAction().getValue(), command.getPayload().toString());
         kafkaProvider.getProducer().send(record);
         logger.debug("...command [{}] pushed", linkId);
 
         return linkId;
     }
 
-    private boolean isActionRegistered(String action) {
+    private boolean isActionRegistered(Action action) {
         return actions.keySet().contains(action);
     }
 
     public void register(Action action) {
-        actions.put(action.getName(), action);
+        actions.put(action, action);
     }
 
-    public Set<String> getSupportedActions() {
-        return actions.keySet();
+    public Stream<String> getSupportedActions() {
+        return actions.keySet().stream().map(v -> v.getValue());
     }
 }
