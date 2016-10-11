@@ -8,6 +8,8 @@ import org.slf4j.LoggerFactory;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.ws.rs.ext.Provider;
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,12 +22,14 @@ public class KafkaProvider {
 
     private static final Logger logger = LoggerFactory.getLogger(KafkaProvider.class);
 
-    public static final String TOPIC = "my-template";
+    public final String cqrsTopic;
 
     private KafkaConsumer<String, String> consumer;
     private KafkaProducer<String, String> producer;
 
-    public KafkaProvider() {
+    @Inject
+    public KafkaProvider(@Named("CQRS_TOPIC") String cqrsTopic) {
+        this.cqrsTopic = cqrsTopic;
         logger.debug("Starting provider");
     }
 
@@ -52,7 +56,7 @@ public class KafkaProvider {
             throw new RuntimeException(e);
         }
 
-        consumer.subscribe(Arrays.asList(TOPIC));
+        consumer.subscribe(Arrays.asList(cqrsTopic));
     }
 
     @PreDestroy

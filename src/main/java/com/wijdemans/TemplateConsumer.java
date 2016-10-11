@@ -14,11 +14,10 @@ import org.slf4j.LoggerFactory;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.inject.Singleton;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
-import static com.wijdemans.cqrs.KafkaProvider.TOPIC;
 
 @Immediate
 @Singleton
@@ -28,6 +27,7 @@ public class TemplateConsumer {
     private static final ObjectMapper mapper = new ObjectMapper();
 
     private static KafkaConsumer consumer;
+    private final String cqrsTopic;
     private final KafkaProvider kafkaProvider;
     private final KafkaPostService kafkaPostService;
     private final TemplateService templateService;
@@ -36,11 +36,13 @@ public class TemplateConsumer {
     public TemplateConsumer(
             KafkaProvider kafkaProvider,
             KafkaPostService kafkaPostService,
-            TemplateService templateService) {
+            TemplateService templateService,
+            @Named("CQRS_TOPIC") String cqrsTopic) {
         this.kafkaProvider = kafkaProvider;
         this.kafkaPostService = kafkaPostService;
         this.templateService = templateService;
         this.consumer = kafkaProvider.getConsumer();
+        this.cqrsTopic = cqrsTopic;
     }
 
     @PostConstruct
@@ -71,12 +73,10 @@ public class TemplateConsumer {
                 timeouts = 0;
             }
             for (ConsumerRecord<String, String> record : records) {
-                switch (record.topic()) {
-                    case TOPIC:
-                        handleTopicMessage(record);
-                        break;
-                    default:
-                        logger.warn("Shouldn't be possible to get message on topic " + record.topic());
+                if (record.topic().equals(cqrsTopic)) {
+                    handleTopicMessage(record);
+                } else {
+                    logger.warn("Shouldn't be possible to get message on topic " + record.topic());
                 }
             }
         }
