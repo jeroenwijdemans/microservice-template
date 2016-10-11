@@ -39,13 +39,16 @@ public class Main {
 
         rc.packages(packages);
 
+
         // enable swagger
         rc.register(SwaggerSerializers.class);
         rc.register(new AbstractBinder() {
             @Override
             protected void configure() {
+                bind("test").to(String.class).named("CQRS_TOPIC");
+
                 bind(KafkaProvider.class).to(KafkaProvider.class).in(Singleton.class);
-                bind(TemplateConsumer.class).to(TemplateConsumer.class).in(Singleton.class);
+                bind(TemplateConsumer.class).to(TemplateConsumer.class).in(Immediate.class);
 
                 bind(TemplateResource.class).to(TemplateResource.class).in(Singleton.class);
                 bind(ApiListingResource.class).to(ApiListingResource.class).in(Singleton.class);
@@ -55,10 +58,6 @@ public class Main {
 
             }
         });
-
-//        rc.register(RolesAllowedDynamicFeature.class); // this enables the RolesAllowed
-
-
 
         // user Jetty Servlet container (not Grizzly) to allow httprequest injection
         ServletContainer servletContainer = new ServletContainer(rc);
