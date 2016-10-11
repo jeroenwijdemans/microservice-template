@@ -25,6 +25,9 @@
 
     <logger name="com.wijdemans" level="debug"/>
 
+    <logger name="org.apache.kafka.clients.consumer" level="warn"/>
+    <logger name="org.apache.kafka.clients.producer" level="warn"/>
+
     <root level="info">
         <appender-ref ref="STDOUT" />
     </root>
