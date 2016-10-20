@@ -1,0 +1,20 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+#    ingress.kubernetes.io/ssl-redirect: "true"
+    kubernetes.io/tls-acme: "true"
+    kubernetes.io/ingress.class: "nginx"
+  name: service-template-ingress
+spec:
+  tls:
+  - hosts:
+    - test.wijdemans.com
+    secretName: echoserver-tls
+  rules:
+  - host: test.wijdemans.com
+    http:
+      paths:
+      - backend:
+          serviceName: service-template
+          servicePort: 7777

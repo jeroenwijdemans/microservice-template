@@ -11,6 +11,7 @@ job("REST_TEMPLATE") {
     steps {
         shell("./gradlew clean fatJar copyDockerResources")
         shell("""
+              set -e
               DIR="\$( cd "\$( dirname "\${BASH_SOURCE[0]}" )" && pwd )"
 
               NAMESPACE="test"
@@ -31,10 +32,11 @@ job("REST_TEMPLATE") {
                    cd \$DIR
                    echo 'Start deployment ... '
 
-                   sed "s~{{DOCKER_IMAGE}}~\${DOCKER_IMAGE}~"  ./cd/rc.yaml.template > ./cd/rc.yaml
+                   sed "s~{{DOCKER_IMAGE}}~\${DOCKER_IMAGE}~"  ./cd/deployment.yaml.template > ./cd/deployment.yaml
 
-                   ~/kubectl apply -f ./cd/rc.yaml
+                   ~/kubectl apply -f ./cd/deployment.yaml
                    ~/kubectl apply -f ./cd/service.yaml
+                   ~/kubectl apply -f ./cd/ingress.yaml
               fi
               """.stripIndent())
     }
