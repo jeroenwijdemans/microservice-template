@@ -31,6 +31,8 @@ TODO :
 - have a jenkins installation
 - have a kubernetes cluster
 - have kubectl available in Jenkins
+- configure .kube/config on Jenkins to allow kubectl to talk to the clustr
+- have some job that seeds cd/dsl.groovy
 
 # Customize
 
