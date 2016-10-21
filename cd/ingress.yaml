@@ -15,6 +15,7 @@ spec:
   - host: test.wijdemans.com
     http:
       paths:
-      - backend:
+      - path: /
+        backend:
           serviceName: service-template
           servicePort: 7777
