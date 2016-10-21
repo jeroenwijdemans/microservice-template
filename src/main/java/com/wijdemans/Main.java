@@ -61,6 +61,7 @@ public class Main {
                 bind(TemplateService.class).to(TemplateService.class).in(Singleton.class);
                 bind(KafkaPostService.class).to(KafkaPostService.class).in(Singleton.class);
 
+                bind(CORSFilter.class).to(CORSFilter.class).in(Singleton.class);
                 bind(PrometheusFilter.class).to(PrometheusFilter.class).in(Singleton.class);
             }
         });
