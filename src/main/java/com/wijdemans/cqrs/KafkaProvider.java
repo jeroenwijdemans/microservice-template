@@ -1,5 +1,6 @@
 package com.wijdemans.cqrs;
 
+import com.wijdemans.Config;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.clients.producer.KafkaProducer;
@@ -37,24 +38,14 @@ public class KafkaProvider {
     public void init() {
         logger.info("Start kafka consumer ...");
 
-        try (InputStream props = ClassLoader.getSystemResourceAsStream("consumer.props")) {
-            Properties properties = new Properties();
-            properties.load(props);
-            // http://stackoverflow.com/questions/28561147/how-to-read-data-using-kafka-consumer-api-from-beginning
-            // making sure the goupId is reset and thus can read from earliest
-            properties.put(ConsumerConfig.GROUP_ID_CONFIG, UUID.randomUUID().toString());
-            properties.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
-            consumer = new KafkaConsumer(properties);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        try (InputStream props = ClassLoader.getSystemResourceAsStream("producer.props")) {
-            Properties properties = new Properties();
-            properties.load(props);
-            producer = new KafkaProducer(properties);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        Properties properties = Config.getProperties("consumer.props");
+        // http://stackoverflow.com/questions/28561147/how-to-read-data-using-kafka-consumer-api-from-beginning
+        // making sure the goupId is reset and thus can read from earliest
+        properties.put(ConsumerConfig.GROUP_ID_CONFIG, UUID.randomUUID().toString());
+        properties.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
+        consumer = new KafkaConsumer(properties);
+
+        producer = new KafkaProducer(Config.getProperties("producer.props"));
 
         consumer.subscribe(Arrays.asList(cqrsTopic));
     }

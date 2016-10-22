@@ -113,6 +113,7 @@ dependencies {
 }
 
 task(run, dependsOn: 'classes', type: JavaExec) {
+    environment 'PROPERTIES_LOCATION',file('./properties').absolutePath
     main = 'com.wijdemans.Main'
     classpath = sourceSets.main.runtimeClasspath
 }

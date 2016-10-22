@@ -15,10 +15,7 @@ Provides:
 - Jenkins jobdsl description
 - kubernetes deployment scripts
 
-
-TODO :
-- build properties
-- runtime properties
+- using properties file locally and a ConfigMap on PROD
 
 # Prerequisites
 
@@ -48,3 +45,13 @@ Set JENKINS_GITHUB_CREDENTIALS to a reference id for valid credentials.
 Set docker registry to valid repository.
 
 (for example by setting these as global jenkins variables)
+
+### property files
+
+The property files are outside of the fatJar (in the ./properties directory)
+The application expects the config files it needs to reside at the env variable PROPERTIES_LOCATION.
+
+These values are set:
+- via gradle job when running locally
+- via -e PROPERTIES_LOCATION=/etc/config option when running docker locally (see docker.sh)
+- via ConfigMap when running on the cluster (see deployment.yaml.template) 

@@ -1,0 +1,4 @@
+test:
+  server:
+    host: localhost
+    port: 1337

@@ -34,6 +34,9 @@ job("REST_TEMPLATE") {
 
                    sed "s~{{DOCKER_IMAGE}}~\${DOCKER_IMAGE}~"  ./cd/deployment.yaml.template > ./cd/deployment.yaml
 
+                   ~/kubectl apply -f ./cd/config.yaml
+                   # all files in the properties directory will be added
+                   ~/kubectl apply configmap config-service-template --from-file=properties/
                    ~/kubectl apply -f ./cd/deployment.yaml
                    ~/kubectl apply -f ./cd/service.yaml
                    ~/kubectl apply -f ./cd/ingress.yaml

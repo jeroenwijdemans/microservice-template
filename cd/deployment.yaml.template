@@ -10,6 +10,9 @@ spec:
         app: service-template
     spec:
       containers:
+        - env:
+          - name: PROPERTIES_LOCATION
+            value: /etc/config
       - name: service-template
         image: {{DOCKER_IMAGE}}
         imagePullPolicy: Always
@@ -21,3 +24,6 @@ spec:
             port: 7777
           initialDelaySeconds: 3
           timeoutSeconds: 1
+      volumeMounts:
+      - name: config-service-template
+        mountPath: /etc/config

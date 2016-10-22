@@ -26,6 +26,10 @@ public class TemplateConsumer {
     private static final Logger logger = LoggerFactory.getLogger(TemplateConsumer.class);
     private static final ObjectMapper mapper = new ObjectMapper();
 
+    // guarantee config is created first
+    @Inject
+    private Config config;
+
     private static KafkaConsumer consumer;
     private final String cqrsTopic;
     private final KafkaProvider kafkaProvider;

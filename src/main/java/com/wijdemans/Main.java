@@ -52,6 +52,8 @@ public class Main {
             protected void configure() {
                 bind("test").to(String.class).named("CQRS_TOPIC");
 
+                bind(Config.class).to(Config.class).in(Immediate.class);
+
                 bind(KafkaProvider.class).to(KafkaProvider.class).in(Singleton.class);
                 bind(TemplateConsumer.class).to(TemplateConsumer.class).in(Immediate.class);
 
