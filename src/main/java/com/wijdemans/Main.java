@@ -58,6 +58,7 @@ public class Main {
                 bind(TemplateConsumer.class).to(TemplateConsumer.class).in(Immediate.class);
 
                 bind(TemplateResource.class).to(TemplateResource.class).in(Singleton.class);
+                bind(HealthResource.class).to(HealthResource.class).in(Singleton.class);
                 bind(ApiListingResource.class).to(ApiListingResource.class).in(Singleton.class);
 
                 bind(TemplateService.class).to(TemplateService.class).in(Singleton.class);
