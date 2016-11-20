@@ -10,6 +10,7 @@ import javax.annotation.PostConstruct;
 import javax.ws.rs.ext.Provider;
 import java.io.*;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Properties;
 
@@ -39,6 +40,7 @@ public class Config {
 
     public static InputStream getFileInputStream(String file) {
         String loc = getPropertiesLocation() + "/" + file;
+        logger.debug("Reading properties from [{}]", loc);
         try {
             File f = Paths.get(loc).toFile();
             return new FileInputStream(f);
@@ -58,7 +60,14 @@ public class Config {
     }
 
     public static String get(String key) {
-        return props.getProperty(key);
+        if (props.containsKey(key)) {
+            return props.getProperty(key);
+        }
+        throw new IllegalStateException(String.format("Cannot find key [%s] in [%s]", key, Arrays.toString(props.keySet().toArray())));
+    }
+
+    public static int getInt(String key) {
+        return Integer.valueOf(get(key));
     }
 
     private void assignProperties(Properties props, Map<String, Object> map, String path) {
@@ -68,8 +77,9 @@ public class Config {
                 key = path + "." + key;
             Object val = entry.getValue();
             if (val instanceof String) {
-                // see if we need to create a compound key
-                props.put(key, val);
+                props.put(key.trim(), val);
+            } else if (val instanceof Number) {
+                props.put(key.trim(), "" + val);
             } else if (val instanceof Map) {
                 assignProperties(props, (Map<String, Object>) val, key);
             }
