@@ -1,4 +1,4 @@
-package com.wijdemans;
+package com.wijdemans.standard;
 
 import org.glassfish.hk2.api.ServiceLocator;
 import org.glassfish.hk2.utilities.ServiceLocatorUtilities;

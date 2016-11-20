@@ -1,4 +1,4 @@
-package com.wijdemans;
+package com.wijdemans.standard;
 
 import org.apache.commons.lang3.StringUtils;
 import org.glassfish.hk2.api.Immediate;

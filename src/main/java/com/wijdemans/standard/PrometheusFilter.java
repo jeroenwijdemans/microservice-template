@@ -1,4 +1,4 @@
-package com.wijdemans;
+package com.wijdemans.standard;
 
 import io.prometheus.client.Counter;
 import org.slf4j.Logger;

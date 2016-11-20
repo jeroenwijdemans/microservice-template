@@ -1,4 +1,4 @@
-package com.wijdemans;
+package com.wijdemans.standard;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.jaxrs.listing.BaseApiListingResource;
@@ -10,9 +10,7 @@ import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 

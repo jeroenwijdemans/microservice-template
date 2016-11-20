@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wijdemans.cqrs.Action;
 import com.wijdemans.cqrs.KafkaPostService;
 import com.wijdemans.cqrs.KafkaProvider;
+import com.wijdemans.standard.Config;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
