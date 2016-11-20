@@ -10,6 +10,7 @@ job("REST_TEMPLATE") {
     }
     steps {
         shell("./gradlew clean fatJar copyDockerResources")
+        shell("./gradlew dep > dependencies.txt && ./gradlew dependencyCheck --info")
         shell("""
               set -e
               DIR="\$( cd "\$( dirname "\${BASH_SOURCE[0]}" )" && pwd )"
