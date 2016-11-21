@@ -103,6 +103,8 @@ dependencies {
     compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${versions.jackson}"
     compile "org.glassfish.jersey.security:oauth2-client:${versions.jersey}"
 
+    compile "org.json:json:20160810"
+
     compile "org.apache.kafka:kafka-clients:0.10.0.1"
 
     compile "org.neo4j.driver:neo4j-java-driver:1.0.5"
