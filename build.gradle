@@ -77,6 +77,7 @@ libraries.testframework = [
 
 configurations {
     compile.exclude group: "javax.ws.rs:jsr311-api:1.1.1"
+    webjars { transitive = false }
 }
 
 dependencies {
@@ -125,11 +126,34 @@ dependencies {
 
 }
 
-task(run, dependsOn: "classes", type: JavaExec) {
-    environment "PROPERTIES_LOCATION", file("./properties").absolutePath
-    main = "com.wijdemans.Main"
+task('extractSwaggerUiWebjars', type: Copy) {
+    configurations.webjars.each { jar ->
+
+        def config = configurations.webjars.resolvedConfiguration
+        def artifact = config.resolvedArtifacts.find {
+            it.file.toString() == jar.absolutePath
+        }
+
+        copy {
+            from zipTree(jar)
+            into file("${buildDir}/swaggerui")
+        }
+        copy {
+            from "${buildDir}/swaggerui/META-INF/resources/webjars/${artifact.name}/${artifact.moduleVersion.id.version}"
+            exclude "index.html"
+            into file("${buildDir}/resources/main/api-docs")
+        }
+    }
+}
+
+processResources.dependsOn "extractSwaggerUiWebjars"
+
+task(run, dependsOn: 'classes', type: JavaExec) {
+    environment 'PROPERTIES_LOCATION', file('./properties/local').absolutePath
+    main = 'com.wijdemans.Main'
     classpath = sourceSets.main.runtimeClasspath
 }
+run.dependsOn "extractSwaggerUiWebjars"
 
 task version << {
     println version
