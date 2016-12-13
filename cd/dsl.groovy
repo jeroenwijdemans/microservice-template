@@ -37,7 +37,7 @@ job("REST_TEMPLATE") {
 
                    ~/kubectl apply -f ./cd/config.yaml
                    # all files in the properties directory will be added
-                   ~/kubectl apply configmap config-service-template --from-file=properties/
+                   ~/kubectl apply configmap config-service-template --from-file=properties/prod
                    ~/kubectl apply -f ./cd/deployment.yaml
                    ~/kubectl apply -f ./cd/service.yaml
                    ~/kubectl apply -f ./cd/ingress.yaml
