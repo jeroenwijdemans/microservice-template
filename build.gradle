@@ -104,6 +104,7 @@ dependencies {
     compile "org.glassfish.jersey.media:jersey-media-json-jackson:${versions.jersey}"
     compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${versions.jackson}"
     compile "org.glassfish.jersey.security:oauth2-client:${versions.jersey}"
+    compile group: 'org.eclipse.jetty.websocket', name: 'javax-websocket-server-impl', version: '9.3.12.v20160915'
 
     compile "org.json:json:20160810"
 

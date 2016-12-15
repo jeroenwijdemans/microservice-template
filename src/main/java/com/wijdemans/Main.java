@@ -10,6 +10,8 @@ import io.swagger.jaxrs.listing.SwaggerSerializers;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
+import org.eclipse.jetty.websocket.jsr356.server.ServerContainer;
+import org.eclipse.jetty.websocket.jsr356.server.deploy.WebSocketServerContainerInitializer;
 import org.glassfish.hk2.api.Immediate;
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
 import org.glassfish.jersey.server.ResourceConfig;
@@ -18,6 +20,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Singleton;
+import javax.servlet.ServletException;
+import javax.websocket.DeploymentException;
 import java.io.IOException;
 
 public class Main {
@@ -78,6 +82,15 @@ public class Main {
         context.addServlet(new ServletHolder(new MetricsServlet()), "/metrics");
 
         server.setHandler(context);
+
+        logger.info("Enabling websocket support");
+        try {
+            ServerContainer wscontainer = WebSocketServerContainerInitializer.configureContext(context);
+            wscontainer.addEndpoint(TemplateWebServiceEndpoint.class);
+        } catch (DeploymentException | ServletException e) {
+            logger.error("Failed to contruct valid container with WS support");
+            throw new RuntimeException(e);
+        }
 
         return server;
     }

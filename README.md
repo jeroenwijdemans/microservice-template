@@ -55,3 +55,25 @@ These values are set:
 - via gradle job when running locally
 - via -e PROPERTIES_LOCATION=/etc/config option when running docker locally (see docker.sh)
 - via ConfigMap when running on the cluster (see deployment.yaml.template) 
+
+# Testing web socket suport
+
+## Using curl 
+
+```
+ curl -i -N -L \
+ 	-H "Connection: Upgrade" \
+ 	-H "Upgrade: websocket" \
+    -H "Sec-WebSocket-Version: 13" \
+    -H 'Sec-WebSocket-Key: key' \
+ 	http://localhost:7755/echo
+```
+
+## Cmd line test application
+Simple go ws application: https://github.com/raphael/wsc
+
+Be sure to specifiy ws:// as protocol:
+
+```
+wsc ws://localhost:7755/echo
+```
