@@ -17,11 +17,11 @@ spec:
         image: {{DOCKER_IMAGE}}
         imagePullPolicy: Always
         ports:
-        - containerPort: 7777
+        - containerPort: 7755
         readinessProbe:
           httpGet:
             path: /api/swagger.json
-            port: 7777
+            port: 7755
           initialDelaySeconds: 3
           timeoutSeconds: 1
       volumeMounts:

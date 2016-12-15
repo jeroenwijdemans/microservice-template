@@ -18,4 +18,4 @@ spec:
       - path: /
         backend:
           serviceName: service-template
-          servicePort: 7777
+          servicePort: 7755

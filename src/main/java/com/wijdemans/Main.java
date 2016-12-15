@@ -69,7 +69,7 @@ public class Main {
         // user Jetty Servlet container (not Grizzly) to allow httprequest injection
         ServletContainer servletContainer = new ServletContainer(rc);
         ServletHolder sh = new ServletHolder(servletContainer);
-        Server server = new Server(7777);
+        Server server = new Server(7755);
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
         context.setContextPath("/");
         context.addServlet(sh, "/*");

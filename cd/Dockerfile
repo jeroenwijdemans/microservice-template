@@ -12,4 +12,4 @@ VOLUME  /etc/config
 
 ENTRYPOINT ["java", "-jar", "/srv/app.jar"]
 
-EXPOSE 7777
+EXPOSE 7755

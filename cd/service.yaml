@@ -7,8 +7,8 @@ metadata:
 spec:
   ports:
     # The port that this service should serve on.
-    - port: 7777
-      targetPort: 7777
+    - port: 7755
+      targetPort: 7755
   # Label keys and values that must match in order to receive traffic for this service.
   selector:
     app: service-template
