@@ -55,6 +55,7 @@ versions += [
         logback: "1.1.2",
         groovy : "2.4.6",
         swagger: "1.5.10",
+        swaggerUi: "2.2.6", // when updating also manually update the index.html if used
         jersey : "2.23.2",
         jackson: "2.8.4",
 ]
@@ -117,6 +118,7 @@ dependencies {
     compile "com.fasterxml.jackson.jaxrs:jackson-jaxrs-base:${versions.jackson}"
     compile "com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:${versions.jackson}"
     compile("io.swagger:swagger-jersey2-jaxrs:${versions.swagger}")
+    webjars "org.webjars:swagger-ui:${versions.swaggerUi}"
 
     // provide http injection
     compile group: "javax.servlet", name: "javax.servlet-api", version: "3.1.0"

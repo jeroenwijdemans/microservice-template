@@ -37,7 +37,7 @@ public class ApiListingResource extends BaseApiListingResource {
     }
 
     @GET
-    @Path("/api/swagger.{type:json|yaml}")
+    @Path("/api-docs/swagger.{type:json|yaml}")
     @Produces({MediaType.APPLICATION_JSON, "application/yaml"})
     @ApiOperation(value = "The swagger definition in either JSON or YAML", hidden = true)
     public Response getListing(
