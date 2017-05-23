@@ -1,7 +1,9 @@
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/3f61ac9050a04f16991dadebb1077e4b)](https://www.codacy.com/app/jeroenwijdemans/microservice-template?utm_source=github.com&utm_medium=referral&utm_content=jeroenwijdemans/microservice-template&utm_campaign=badger)
+[![Build Status](https://travis-ci.org/jeroenwijdemans/microservice-template.svg?branch=master)](https://travis-ci.org/jeroenwijdemans/microservice-template)
+
 # Template for microservices
 
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/3f61ac9050a04f16991dadebb1077e4b)](https://www.codacy.com/app/jeroenwijdemans/microservice-template?utm_source=github.com&utm_medium=referral&utm_content=jeroenwijdemans/microservice-template&utm_campaign=badger)
 
 This template standardizes a way of working with micro services.
 
